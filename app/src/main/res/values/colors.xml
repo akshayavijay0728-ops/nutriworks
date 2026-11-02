@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand / Primary: Leaf & Emerald Green -->
+    <color name="md_theme_light_primary">#2E7D32</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#C8E6C9</color>
+    <color name="md_theme_light_onPrimaryContainer">#002107</color>
+
+    <!-- Secondary: Warm Citrus & Vitality Orange -->
+    <color name="md_theme_light_secondary">#E65100</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_secondaryContainer">#FFE0B2</color>
+    <color name="md_theme_light_onSecondaryContainer">#2E1500</color>
+
+    <!-- Tertiary: Fresh Teal -->
+    <color name="md_theme_light_tertiary">#00897B</color>
+    <color name="md_theme_light_onTertiary">#FFFFFF</color>
+    <color name="md_theme_light_tertiaryContainer">#B2DFDB</color>
+    <color name="md_theme_light_onTertiaryContainer">#00201A</color>
+
+    <!-- Errors -->
+    <color name="md_theme_light_error">#BA1A1A</color>
+    <color name="md_theme_light_onError">#FFFFFF</color>
+    <color name="md_theme_light_errorContainer">#FFDAD6</color>
+    <color name="md_theme_light_onErrorContainer">#410002</color>
+
+    <!-- Backgrounds & Surfaces -->
+    <color name="md_theme_light_background">#F8FAF6</color>
+    <color name="md_theme_light_onBackground">#191C19</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_onSurface">#191C19</color>
+    <color name="md_theme_light_surfaceVariant">#E1E5DC</color>
+    <color name="md_theme_light_onSurfaceVariant">#44483E</color>
+    <color name="md_theme_light_outline">#74796D</color>
+    <color name="md_theme_light_outlineVariant">#C4C8BA</color>
+
+    <!-- Splash Screen Color -->
+    <color name="splash_background">#2E7D32</color>
+
+    <!-- Nutrition Macro Indicator Colors -->
+    <color name="macro_calories">#E65100</color>
+    <color name="macro_protein">#2E7D32</color>
+    <color name="macro_carbs">#F57C00</color>
+    <color name="macro_fat">#0288D1</color>
+</resources>

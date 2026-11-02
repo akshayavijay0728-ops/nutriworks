@@ -1,0 +1,143 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Read optional USDA API Key from local.properties (not committed to VCS)
+Properties localProps = new Properties()
+File localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { stream ->
+        localProps.load(stream)
+    }
+}
+String usdaApiKey = localProps.getProperty('USDA_API_KEY', 'DEMO_KEY')
+
+android {
+    namespace 'com.nutriworks.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.nutriworks.app"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Inject USDA FoodData Central API Key into BuildConfig
+        buildConfigField "String", "USDA_API_KEY", "\"${usdaApiKey}\""
+    }
+
+    signingConfigs {
+        release {
+            // Configured via environment variables or local gradle properties for CI/CD security
+            def keystoreFile = System.getenv("NUTRIWORKS_KEYSTORE_PATH") ?: "keystore/release.jks"
+            def storePass = System.getenv("NUTRIWORKS_STORE_PASSWORD") ?: "nutriworks_pass"
+            def keyAliasVal = System.getenv("NUTRIWORKS_KEY_ALIAS") ?: "nutriworks"
+            def keyPass = System.getenv("NUTRIWORKS_KEY_PASSWORD") ?: "nutriworks_pass"
+
+            if (file(keystoreFile).exists()) {
+                storeFile file(keystoreFile)
+                storePassword storePass
+                keyAlias keyAliasVal
+                keyPassword keyPass
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Sign with release config if keystore exists, otherwise fall back to debug signing for testing
+            if (signingConfigs.release.storeFile != null && signingConfigs.release.storeFile.exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-DEBUG"
+            minifyEnabled false
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+
+    // Do not compress TFLite models so they can be memory-mapped directly from assets
+    aaptOptions {
+        noCompress "tflite"
+    }
+}
+
+dependencies {
+    // Core Android & UI
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+
+    // Navigation Component (Java)
+    implementation 'androidx.navigation:navigation-fragment:2.7.7'
+    implementation 'androidx.navigation:navigation-ui:2.7.7'
+
+    // Lifecycle (ViewModel & LiveData)
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.8.4'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.8.4'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.8.4'
+
+    // Room Database
+    implementation 'androidx.room:room-runtime:2.6.1'
+    annotationProcessor 'androidx.room:room-compiler:2.6.1'
+
+    // CameraX
+    implementation 'androidx.camera:camera-core:1.3.4'
+    implementation 'androidx.camera:camera-camera2:1.3.4'
+    implementation 'androidx.camera:camera-lifecycle:1.3.4'
+    implementation 'androidx.camera:camera-view:1.3.4'
+
+    // EXIF Interface for Image Rotation Correction
+    implementation 'androidx.exifinterface:exifinterface:1.3.7'
+
+    // MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // TensorFlow Lite Core & Task Vision Library
+    implementation 'org.tensorflow:tensorflow-lite:2.16.1'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.4.4'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.4.4'
+    implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.4'
+
+    // Retrofit & Gson (USDA API fallback client)
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
+
+    // Unit Testing
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.12.0'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+    testImplementation 'androidx.room:room-testing:2.6.1'
+
+    // Instrumented Android & Espresso Testing
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.6.1'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test:runner:1.6.1'
+    androidTestImplementation 'org.mockito:mockito-android:5.12.0'
+    androidTestImplementation 'androidx.room:room-testing:2.6.1'
+    androidTestImplementation 'androidx.arch.core:core-testing:2.2.0'
+}

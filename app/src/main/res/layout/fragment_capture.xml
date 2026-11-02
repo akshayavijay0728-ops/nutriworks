@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- CameraX Live Preview -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/view_finder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:scaleType="fillCenter" />
+
+    <!-- Viewfinder Center Guide -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_viewfinder_guide"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        app:cardBackgroundColor="#00000000"
+        app:cardCornerRadius="@dimen/corner_radius_large"
+        app:cardElevation="0dp"
+        app:strokeColor="#80FFFFFF"
+        app:strokeWidth="2dp"
+        app:layout_constraintBottom_toTopOf="@id/layout_bottom_controls"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_top_controls">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="@dimen/spacing_medium"
+            android:background="#66000000"
+            android:paddingHorizontal="@dimen/spacing_medium"
+            android:paddingVertical="@dimen/spacing_xxsmall"
+            android:text="@string/capture_camera_hint"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="#FFFFFF" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Top Overlay Controls: Flash & Flip -->
+    <LinearLayout
+        android:id="@+id/layout_top_controls"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#4D000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/spacing_normal"
+        android:paddingVertical="@dimen/spacing_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Flash Toggle Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_flash"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/capture_flash_desc"
+            app:icon="@drawable/ic_flash_off"
+            app:iconTint="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/text_flash_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_xsmall"
+            android:layout_weight="1"
+            android:text="@string/flash_mode_off"
+            android:textAppearance="?attr/textAppearanceLabelMedium"
+            android:textColor="#FFFFFF" />
+
+        <!-- Camera Flip Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_flip_camera"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/capture_flip_desc"
+            app:icon="@drawable/ic_camera_flip"
+            app:iconTint="#FFFFFF" />
+
+    </LinearLayout>
+
+    <!-- Bottom Controls: Gallery Picker, Shutter Button, Status -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_bottom_controls"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:background="#66000000"
+        android:paddingHorizontal="@dimen/spacing_large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Gallery Pick Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_gallery_picker"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/capture_btn_gallery"
+            app:cornerRadius="@dimen/corner_radius_medium"
+            app:icon="@drawable/ic_gallery"
+            app:iconGravity="textStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Circular Shutter Capture Button -->
+        <ImageButton
+            android:id="@+id/btn_shutter"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/capture_shutter_desc"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_shutter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Circular Capture Progress Indicator -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress_capture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:indicatorColor="?attr/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/btn_shutter"
+            app:layout_constraintEnd_toEndOf="@id/btn_shutter"
+            app:layout_constraintStart_toStartOf="@id/btn_shutter"
+            app:layout_constraintTop_toTopOf="@id/btn_shutter" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Permission Denied / No Camera Hardware Fallback Container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_permission_denied"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/colorBackground"
+        android:padding="@dimen/spacing_large"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/img_permission_icon"
+            android:layout_width="@dimen/icon_size_hero"
+            android:layout_height="@dimen/icon_size_hero"
+            android:contentDescription="@string/permission_camera_rationale_title"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintBottom_toTopOf="@id/text_permission_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:tint="?attr/colorPrimary" />
+
+        <TextView
+            android:id="@+id/text_permission_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:gravity="center"
+            android:text="@string/permission_camera_rationale_title"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/text_permission_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_permission_icon" />
+
+        <TextView
+            android:id="@+id/text_permission_msg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:gravity="center"
+            android:text="@string/permission_camera_rationale_msg"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintBottom_toTopOf="@id/btn_action_permission"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_permission_title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_action_permission"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height_standard"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:text="@string/permission_btn_grant"
+            app:cornerRadius="@dimen/corner_radius_medium"
+            app:layout_constraintBottom_toTopOf="@id/btn_fallback_gallery"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_permission_msg" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_fallback_gallery"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height_standard"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="@string/capture_btn_gallery"
+            app:cornerRadius="@dimen/corner_radius_medium"
+            app:icon="@drawable/ic_gallery"
+            app:iconGravity="textStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_action_permission" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

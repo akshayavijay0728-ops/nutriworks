@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_onboarding"
+        android:name="com.nutriworks.app.ui.profile.OnboardingFragment"
+        android:label="Welcome"
+        tools:layout="@layout/fragment_onboarding" />
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.nutriworks.app.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_capture"
+        android:name="com.nutriworks.app.ui.capture.CaptureFragment"
+        android:label="@string/title_capture"
+        tools:layout="@layout/fragment_capture">
+        <action
+            android:id="@+id/action_capture_to_confirmImage"
+            app:destination="@id/navigation_confirm_image" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_confirm_image"
+        android:name="com.nutriworks.app.ui.capture.ConfirmImageFragment"
+        android:label="@string/title_confirm_image"
+        tools:layout="@layout/fragment_confirm_image">
+        <argument
+            android:name="image_path"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_confirmImage_to_result"
+            app:destination="@id/navigation_result" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_result"
+        android:name="com.nutriworks.app.ui.capture.ResultFragment"
+        android:label="@string/title_result"
+        tools:layout="@layout/fragment_result">
+        <argument
+            android:name="image_path"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.nutriworks.app.ui.history.HistoryFragment"
+        android:label="@string/title_history"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/navigation_reports"
+        android:name="com.nutriworks.app.ui.reports.ReportsFragment"
+        android:label="@string/title_reports"
+        tools:layout="@layout/fragment_reports" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.nutriworks.app.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
+
+</navigation>

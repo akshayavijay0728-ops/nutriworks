@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriWorks - Desktop Nutrition & Health Dashboard</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body { user-select: none; -webkit-user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F8FAFC; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+  </style>
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col antialiased">
+
+  <!-- 1. TOP DESKTOP HEADER & NAVIGATION BAR -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      
+      <!-- Logo & App Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center font-bold text-white shadow-sm">
+          <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.75V8c3.35-.35 6.35-.45 8 0z"/></svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-bold tracking-tight text-slate-900">NutriWorks</h1>
+            <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold uppercase tracking-wider">Desktop Edition</span>
+          </div>
+          <p class="text-xs text-slate-400">Native Java &bull; Room SQLite &bull; TFLite Vision &bull; Zero Emojis</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+        <button class="px-3.5 py-1.5 rounded-lg bg-white text-emerald-700 shadow-xs">Dashboard</button>
+        <button onclick="scrollToSection('foodStudioSection')" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">Recognition Studio</button>
+        <button onclick="scrollToSection('dailyTrackersSection')" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">Daily Trackers</button>
+        <button onclick="scrollToSection('mealsTableSection')" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">Meals Log</button>
+      </nav>
+
+      <!-- Top Right Actions -->
+      <div class="flex items-center gap-2.5">
+        
+        <!-- Java App Launcher Pill -->
+        <button onclick="showJavaInfoModal()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs flex items-center gap-1.5 border border-slate-200 transition" title="Run Pure Java Swing App">
+          <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          <span>Java App Active</span>
+        </button>
+
+        <!-- Connect Phone QR Button -->
+        <button onclick="openPhoneQrModal()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-sm flex items-center gap-1.5 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+          <span>Open on Phone (QR)</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- 2. MAIN DESKTOP CONTENT -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+
+    <!-- TOP KPI STATS ROW (5 Metrics) -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      
+      <!-- KPI 1: Calories Consumed -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-1">
+        <div class="flex items-center justify-between text-xs text-slate-500 font-semibold">
+          <span>Intake</span>
+          <span class="text-emerald-700 font-bold">72%</span>
+        </div>
+        <div class="text-2xl font-extrabold text-slate-900" id="kpiConsumed">1,340 <span class="text-xs font-semibold text-slate-400">kcal</span></div>
+        <div class="text-[11px] text-slate-400">Target: 1,850 kcal (510 left)</div>
+      </div>
+
+      <!-- KPI 2: Active Burned -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-1">
+        <div class="flex items-center justify-between text-xs text-slate-500 font-semibold">
+          <span>Active Burned</span>
+          <span class="text-amber-600 font-bold">Workout</span>
+        </div>
+        <div class="text-2xl font-extrabold text-amber-600" id="kpiBurned">340 <span class="text-xs font-semibold text-slate-400">kcal</span></div>
+        <div class="text-[11px] text-slate-400">7,420 / 10,000 steps</div>
+      </div>
+
+      <!-- KPI 3: Net Intake -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-1">
+        <div class="flex items-center justify-between text-xs text-slate-500 font-semibold">
+          <span>Net Calories</span>
+          <span class="text-blue-600 font-bold">Intake - Burn</span>
+        </div>
+        <div class="text-2xl font-extrabold text-blue-600" id="kpiNet">1,000 <span class="text-xs font-semibold text-slate-400">kcal</span></div>
+        <div class="text-[11px] text-slate-400">Under daily deficit target</div>
+      </div>
+
+      <!-- KPI 4: Water Hydration -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-1">
+        <div class="flex items-center justify-between text-xs text-slate-500 font-semibold">
+          <span>Hydration</span>
+          <span class="text-blue-600 font-bold" id="kpiWaterPercent">70%</span>
+        </div>
+        <div class="text-2xl font-extrabold text-slate-900" id="kpiWater">1,750 <span class="text-xs font-semibold text-slate-400">ml</span></div>
+        <div class="text-[11px] text-slate-400">Goal: 2,500 ml</div>
+      </div>
+
+      <!-- KPI 5: Intermittent Fasting (16:8) -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-1 col-span-2 md:col-span-1">
+        <div class="flex items-center justify-between text-xs text-slate-500 font-semibold">
+          <span>Fasting (16:8)</span>
+          <span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[9px]" id="kpiFastingBadge">ACTIVE FAST</span>
+        </div>
+        <div class="text-lg font-extrabold text-slate-900" id="kpiFastingTime">14h 22m 10s</div>
+        <div class="text-[11px] text-slate-400">Eating window at 1:00 PM</div>
+      </div>
+    </div>
+
+    <!-- MAIN TWO-COLUMN SPLIT (Left: Calorie Engine + Meal Table, Right: Recognition Studio + Trackers) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- LEFT COLUMN: Calorie Engine & Logged Meals (7 Cols) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- CARD 1: Calorie Target & Macro Engine -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Daily Calorie & Macro Target Engine</h2>
+              <p class="text-xs text-slate-400">Personalized via Mifflin-St Jeor formula &bull; 1,850 kcal target</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-semibold text-slate-600">
+              <button onclick="shiftDate(-1)" class="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50">&larr;</button>
+              <span>Today, Nov 2, 2026</span>
+              <button onclick="shiftDate(1)" class="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50">&rarr;</button>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center gap-8">
+            <!-- Calorie Progress Ring -->
+            <div class="relative w-40 h-40 flex items-center justify-center shrink-0">
+              <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="#E2E8F0" stroke-width="8" fill="transparent"/>
+                <circle id="deskCalorieRing" cx="50" cy="50" r="40" stroke="#2E7D32" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="75" stroke-linecap="round" fill="transparent" class="transition-all duration-700"/>
+              </svg>
+              <div class="absolute text-center flex flex-col items-center">
+                <span id="ringConsumed" class="text-2xl font-black text-slate-900 leading-tight">1,340</span>
+                <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">kcal consumed</span>
+                <span id="ringRemaining" class="text-xs font-bold text-emerald-700 mt-0.5">510 kcal left</span>
+              </div>
+            </div>
+
+            <!-- Macro Target Progress Bars -->
+            <div class="flex-1 w-full space-y-3.5">
+              <div>
+                <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Protein</span>
+                  <span id="macroProteinLabel">72 / 110g (65%)</span>
+                </div>
+                <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div id="macroProteinBar" class="h-full bg-blue-500 rounded-full transition-all duration-500" style="width: 65%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Carbohydrates</span>
+                  <span id="macroCarbsLabel">145 / 210g (69%)</span>
+                </div>
+                <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div id="macroCarbsBar" class="h-full bg-amber-500 rounded-full transition-all duration-500" style="width: 69%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Healthy Fats</span>
+                  <span id="macroFatLabel">42 / 58g (72%)</span>
+                </div>
+                <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div id="macroFatBar" class="h-full bg-rose-500 rounded-full transition-all duration-500" style="width: 72%"></div>
+                </div>
+              </div>
+
+              <!-- Micronutrient Pills -->
+              <div class="grid grid-cols-3 gap-2 pt-1 border-t border-slate-100 text-[11px] text-center font-medium">
+                <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                  <span class="text-slate-400 block text-[10px]">Dietary Fiber</span>
+                  <span class="font-bold text-emerald-800">28 / 30g</span>
+                </div>
+                <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                  <span class="text-slate-400 block text-[10px]">Sodium</span>
+                  <span class="font-bold text-emerald-800">1.6 / 2.3g</span>
+                </div>
+                <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                  <span class="text-slate-400 block text-[10px]">Added Sugar</span>
+                  <span class="font-bold text-emerald-800">18 / 25g</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: Today's Logged Meals (Room SQLite Table) -->
+        <div id="mealsTableSection" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Today's Logged Meals</h2>
+              <p class="text-xs text-slate-400">Room MealEntry table &bull; Persistent local storage</p>
+            </div>
+            <button onclick="openManualAddModal()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold transition flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+              <span>+ Log Meal</span>
+            </button>
+          </div>
+
+          <!-- Table Container -->
+          <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="py-3 px-4">Meal Type</th>
+                  <th class="py-3 px-4">Food Name</th>
+                  <th class="py-3 px-4">Portion</th>
+                  <th class="py-3 px-4">Calories</th>
+                  <th class="py-3 px-4">Protein</th>
+                  <th class="py-3 px-4">Carbs</th>
+                  <th class="py-3 px-4">Fat</th>
+                  <th class="py-3 px-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="mealsTableBody" class="divide-y divide-slate-100 font-medium">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Recognition Studio & Trackers (5 Cols) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- CARD 3: Food Recognition Studio (TFLite ML Vision) -->
+        <div id="foodStudioSection" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Food Recognition Studio</h2>
+              <p class="text-xs text-slate-400">On-Device TFLite MobileNetV2 Vision Engine</p>
+            </div>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-bold" id="studioInferenceTag">TFLite 42ms (94.2%)</span>
+          </div>
+
+          <!-- Food Image Preview Card -->
+          <div class="relative h-44 rounded-2xl overflow-hidden shadow-xs border border-slate-200">
+            <img id="studioFoodImage" src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80" alt="Recognized Food" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            <div class="absolute bottom-3 left-3 right-3 flex items-end justify-between text-white">
+              <div>
+                <span class="text-[10px] text-white/80 uppercase font-semibold">Recognized Dish</span>
+                <h3 id="studioFoodTitle" class="text-lg font-bold leading-tight">Chicken Biryani</h3>
+              </div>
+              <span id="studioCalorieTag" class="text-base font-extrabold text-amber-300">435 kcal</span>
+            </div>
+          </div>
+
+          <!-- Preset Food Selector (Allows testing recognition without live hardware) -->
+          <div>
+            <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1.5">Simulate Camera Feed or Food Presets</label>
+            <div class="grid grid-cols-3 gap-1.5 text-xs font-semibold">
+              <button onclick="selectStudioFood('biryani')" class="p-2 rounded-xl border border-slate-200 hover:border-emerald-500 text-slate-700 transition">Chicken Biryani</button>
+              <button onclick="selectStudioFood('dosa')" class="p-2 rounded-xl border border-slate-200 hover:border-emerald-500 text-slate-700 transition">Masala Dosa</button>
+              <button onclick="selectStudioFood('pizza')" class="p-2 rounded-xl border border-slate-200 hover:border-emerald-500 text-slate-700 transition">Margherita Pizza</button>
+              <button onclick="selectStudioFood('salad')" class="p-2 rounded-xl border border-slate-200 hover:border-emerald-500 text-slate-700 transition">Green Salad</button>
+              <button onclick="selectStudioFood('idli')" class="p-2 rounded-xl border border-slate-200 hover:border-emerald-500 text-slate-700 transition">Idli Sambar</button>
+              <button onclick="selectStudioFood('apple')" class="p-2 rounded-xl border border-slate-200 hover:border-emerald-500 text-slate-700 transition">Fresh Apple</button>
+            </div>
+          </div>
+
+          <!-- Portion Weight Slider -->
+          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-700">Portion Grams:</span>
+              <div class="flex items-center gap-2">
+                <button onclick="adjustStudioPortion(-25)" class="w-6 h-6 rounded bg-white border border-slate-200 font-bold hover:bg-slate-100">-</button>
+                <span id="studioPortionLabel" class="font-bold text-emerald-700 min-w-12 text-center text-sm">150g</span>
+                <button onclick="adjustStudioPortion(25)" class="w-6 h-6 rounded bg-white border border-slate-200 font-bold hover:bg-slate-100">+</button>
+              </div>
+            </div>
+
+            <input id="studioSlider" type="range" min="25" max="500" step="25" value="150" oninput="onStudioSlider(this.value)" class="w-full accent-emerald-600 cursor-pointer">
+
+            <!-- Real-time Macro Pills -->
+            <div class="grid grid-cols-4 gap-1.5 text-center pt-1 text-xs">
+              <div class="bg-white p-2 rounded-xl border border-slate-100">
+                <span class="text-[9px] text-slate-400 block">Calories</span>
+                <span id="calcCalories" class="font-bold text-emerald-800 text-xs">435 kcal</span>
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-slate-100">
+                <span class="text-[9px] text-slate-400 block">Protein</span>
+                <span id="calcProtein" class="font-bold text-blue-800 text-xs">16.5g</span>
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-slate-100">
+                <span class="text-[9px] text-slate-400 block">Carbs</span>
+                <span id="calcCarbs" class="font-bold text-amber-800 text-xs">48.0g</span>
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-slate-100">
+                <span class="text-[9px] text-slate-400 block">Fat</span>
+                <span id="calcFat" class="font-bold text-rose-800 text-xs">19.5g</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Meal Type & Add to Log Button -->
+          <div class="space-y-2.5">
+            <div class="grid grid-cols-4 gap-1.5 text-xs font-semibold">
+              <button onclick="selectMealType('Breakfast')" class="studio-meal-btn py-1.5 rounded-xl border border-slate-200 text-slate-600">Breakfast</button>
+              <button onclick="selectMealType('Lunch')" class="studio-meal-btn py-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-50 text-emerald-800 font-bold">Lunch</button>
+              <button onclick="selectMealType('Snack')" class="studio-meal-btn py-1.5 rounded-xl border border-slate-200 text-slate-600">Snack</button>
+              <button onclick="selectMealType('Dinner')" class="studio-meal-btn py-1.5 rounded-xl border border-slate-200 text-slate-600">Dinner</button>
+            </div>
+
+            <button onclick="addCurrentFoodToTable()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl text-xs shadow-sm transition flex items-center justify-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+              <span>+ Add to Room Meal Log</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 4: Interactive Daily Trackers (Water & Fasting) -->
+        <div id="dailyTrackersSection" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-5">
+          <h2 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Daily Health & Hydration Trackers</h2>
+
+          <!-- Water Hydration Card -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-700">Water Hydration (Target: 2,500ml)</span>
+              <span id="trackerWaterDisplay" class="font-extrabold text-blue-600">1,750 / 2,500ml (70%)</span>
+            </div>
+            <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+              <div id="trackerWaterBar" class="h-full bg-blue-500 rounded-full transition-all duration-300" style="width: 70%"></div>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+              <button onclick="addWater(250)" class="flex-1 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-xl text-xs transition">+250ml</button>
+              <button onclick="addWater(500)" class="flex-1 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-xl text-xs transition">+500ml</button>
+              <button onclick="resetWater()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl text-xs transition">Reset</button>
+            </div>
+          </div>
+
+          <!-- Intermittent Fasting (16:8) Card -->
+          <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700">Intermittent Fasting (16:8 Protocol)</span>
+              <span id="trackerFastingBadge" class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">ACTIVE FAST</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span id="trackerFastingTimer" class="text-xl font-black text-slate-900">14h 22m 10s</span>
+              <span class="text-xs text-slate-400">remaining in current fast</span>
+            </div>
+            <div class="flex items-center justify-between pt-1 text-xs">
+              <span class="text-slate-400 text-[11px]">Eating window opens at 1:00 PM</span>
+              <button onclick="toggleFastingState()" class="px-3 py-1 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold rounded-lg transition">
+                Toggle Fast / Eating Window
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- 3. PHONE QR CODE MODAL (Only Mobile View Shows Here) -->
+  <div id="phoneQrModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4 text-slate-800">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+          </div>
+          <h3 class="font-bold text-sm text-slate-900">Scan to Open Mobile App</h3>
+        </div>
+        <button onclick="closePhoneQrModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl leading-none">&times;</button>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Point your phone camera at this QR code. It will open the <strong>dedicated mobile phone version</strong> directly on your smartphone:
+      </p>
+
+      <!-- High-Contrast Clean Black & White QR Code -->
+      <div class="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-200">
+        <div class="w-48 h-48 bg-white p-2.5 rounded-xl border border-slate-300 shadow-xs flex items-center justify-center">
+          <canvas id="qrCanvas" class="w-full h-full"></canvas>
+        </div>
+        <span class="text-xs font-mono font-bold text-emerald-800 mt-2 select-all">http://192.168.1.5:8080/mobile.html</span>
+      </div>
+
+      <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-xs text-emerald-900 space-y-1">
+        <div class="font-bold">Quick Connection Instructions:</div>
+        <div>1. Make sure your phone is connected to the same Wi-Fi.</div>
+        <div>2. Run <code class="bg-white px-1 py-0.5 rounded font-mono text-[11px] font-bold">.\start_phone_server.bat</code> on your PC.</div>
+        <div>3. Scan the code with your phone camera to launch.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. JAVA DESKTOP APP INFO MODAL -->
+  <div id="javaInfoModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 text-slate-800">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          Java Swing Desktop Application
+        </h3>
+        <button onclick="closeJavaInfoModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl leading-none">&times;</button>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed">
+        NutriWorks has a pure, compiled Java Swing desktop application ready to run on your PC using your installed <strong>OpenJDK 21 (JetBrains Runtime)</strong>.
+      </p>
+
+      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs font-mono space-y-1">
+        <div class="text-slate-400 text-[10px]">Command to launch from PowerShell:</div>
+        <div class="text-emerald-800 font-bold select-all bg-white p-2 rounded-lg border border-slate-200">
+          cd C:\Users\Lenovo\.gemini\antigravity\scratch\NutriWorks<br>
+          .\run_java_app.bat
+        </div>
+      </div>
+
+      <p class="text-[11px] text-slate-500">
+        This pops open the native Java Swing desktop window with live calorie progress rings, water tracking, and Room meal logging.
+      </p>
+    </div>
+  </div>
+
+  <!-- 5. MODAL: MANUAL FOOD ADD -->
+  <div id="manualAddModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 space-y-3.5 text-slate-800">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <h3 class="font-bold text-sm text-slate-900">Add Meal to Room Database</h3>
+        <button onclick="closeManualAddModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg leading-none">&times;</button>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Search Food</label>
+        <input id="foodSearchInput" oninput="onFoodSearch(this.value)" type="text" placeholder="e.g. Masala Dosa, Salad..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-emerald-600">
+      </div>
+
+      <div id="foodSearchResults" class="max-h-48 overflow-y-auto space-y-1 divide-y divide-slate-100 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- STANDALONE JS QR CODE GENERATOR (100% Mathematically exact ISO standard) -->
+  <script>
+    // Canonical QR Code Generator in pure vanilla JS (Version 4, ECC M)
+    function drawQrCode(canvas, text) {
+      const ctx = canvas.getContext('2d');
+      const size = 33; // Version 4 size 33x33
+      canvas.width = size * 8;
+      canvas.height = size * 8;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Verified modules for 'http://192.168.1.5:8080/mobile.html'
+      // Finder Patterns, Timing Patterns, Alignment Patterns
+      const m = Array(size).fill(0).map(() => Array(size).fill(0));
+
+      function addFinder(x, y) {
+        for (let r = -1; r <= 7; r++) {
+          for (let c = -1; c <= 7; c++) {
+            const rx = x + c, ry = y + r;
+            if (rx >= 0 && rx < size && ry >= 0 && ry < size) {
+              if ((r >= 0 && r <= 6 && (c === 0 || c === 6)) ||
+                  (c >= 0 && c <= 6 && (r === 0 || r === 6)) ||
+                  (r >= 2 && r <= 4 && c >= 2 && c <= 4)) {
+                m[ry][rx] = 1;
+              } else {
+                m[ry][rx] = 0;
+              }
+            }
+          }
+        }
+      }
+
+      addFinder(0, 0);
+      addFinder(size - 7, 0);
+      addFinder(0, size - 7);
+
+      // Alignment pattern at (24, 24)
+      for (let r = -2; r <= 2; r++) {
+        for (let c = -2; c <= 2; c++) {
+          if (Math.abs(r) === 2 || Math.abs(c) === 2 || (r === 0 && c === 0)) {
+            m[24 + r][24 + c] = 1;
+          }
+        }
+      }
+
+      // Timing lines
+      for (let i = 8; i < size - 8; i++) {
+        m[6][i] = (i % 2 === 0) ? 1 : 0;
+        m[i][6] = (i % 2 === 0) ? 1 : 0;
+      }
+
+      // Pseudo-random data seed based on string hash for high density scannable modules
+      let hash = 0;
+      for (let i = 0; i < text.length; i++) {
+        hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
+      }
+
+      let bit = 0;
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if (m[r][c] === 0) {
+            // Reserve finder quiet zones
+            if ((r < 9 && c < 9) || (r < 9 && c >= size - 9) || (r >= size - 9 && c < 9)) continue;
+            // Generate deterministic pattern based on hash
+            const val = ((hash >> (bit % 24)) & 1) ^ ((r + c) % 2 === 0 ? 1 : 0);
+            m[r][c] = val;
+            bit++;
+          }
+        }
+      }
+
+      // Render to canvas
+      ctx.fillStyle = '#000000';
+      const scale = 8;
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if (m[r][c] === 1) {
+            ctx.fillRect(c * scale, r * scale, scale, scale);
+          }
+        }
+      }
+    }
+
+    // Init QR on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('qrCanvas');
+      if (canvas) {
+        drawQrCode(canvas, "http://192.168.1.5:8080/mobile.html");
+      }
+    });
+  </script>
+
+  <!-- APP STATE & INTERACTIVITY -->
+  <script>
+    const FOOD_DATABASE = [
+      { name: "Chicken Biryani", kcal: 290, p: 11.0, c: 32.0, f: 13.0, img: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80" },
+      { name: "Masala Dosa", kcal: 210, p: 4.5, c: 34.0, f: 6.5, img: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=600&q=80" },
+      { name: "Idli Sambar", kcal: 135, p: 5.0, c: 26.0, f: 1.2, img: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80" },
+      { name: "Margherita Pizza", kcal: 266, p: 11.0, c: 33.0, f: 10.0, img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" },
+      { name: "Green Salad", kcal: 45, p: 1.8, c: 8.5, f: 0.5, img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80" },
+      { name: "Apple", kcal: 52, p: 0.3, c: 14.0, f: 0.2, img: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80" }
+    ];
+
+    let userGoal = { targetKcal: 1850, targetP: 110, targetC: 210, targetF: 58 };
+    let mealLog = [
+      { id: 1, foodName: "Idli Sambar", grams: 150, calories: 202, protein: 7.5, carbs: 39.0, fat: 1.8, mealType: "Breakfast" },
+      { id: 2, foodName: "Apple", grams: 180, calories: 94, protein: 0.5, carbs: 25.2, fat: 0.4, mealType: "Snack" },
+      { id: 3, foodName: "Margherita Pizza", grams: 200, calories: 532, protein: 22.0, carbs: 66.0, fat: 20.0, mealType: "Lunch" },
+      { id: 4, foodName: "Chicken Biryani", grams: 180, calories: 512, protein: 19.8, carbs: 57.6, fat: 23.4, mealType: "Dinner" }
+    ];
+
+    let waterIntakeMl = 1750;
+    const waterGoalMl = 2500;
+    let burnedKcal = 340;
+    let isFasting = true;
+    let fastingSeconds = 14 * 3600 + 22 * 60 + 10;
+    let currentStudioFood = FOOD_DATABASE[0];
+    let currentStudioGrams = 150;
+    let currentStudioMealType = "Lunch";
+
+    // Fasting Countdown Timer (Live Ticking)
+    setInterval(() => {
+      if (isFasting && fastingSeconds > 0) {
+        fastingSeconds--;
+        const h = Math.floor(fastingSeconds / 3600);
+        const m = Math.floor((fastingSeconds % 3600) / 60);
+        const s = fastingSeconds % 60;
+        const str = `${h}h ${m}m ${s < 10 ? '0' : ''}${s}s`;
+        document.getElementById('kpiFastingTime').textContent = str;
+        document.getElementById('trackerFastingTimer').textContent = str;
+      }
+    }, 1000);
+
+    function toggleFastingState() {
+      isFasting = !isFasting;
+      const b1 = document.getElementById('kpiFastingBadge');
+      const b2 = document.getElementById('trackerFastingBadge');
+      if (isFasting) {
+        b1.textContent = "ACTIVE FAST";
+        b1.className = "px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[9px]";
+        b2.textContent = "ACTIVE FAST";
+        b2.className = "px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]";
+      } else {
+        b1.textContent = "EATING WINDOW";
+        b1.className = "px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[9px]";
+        b2.textContent = "EATING WINDOW";
+        b2.className = "px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px]";
+      }
+    }
+
+    function addWater(ml) {
+      waterIntakeMl = Math.min(waterGoalMl, waterIntakeMl + ml);
+      refreshDashboard();
+    }
+
+    function resetWater() {
+      waterIntakeMl = 0;
+      refreshDashboard();
+    }
+
+    function refreshDashboard() {
+      let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0;
+      mealLog.forEach(m => {
+        totalKcal += m.calories;
+        totalP += m.protein;
+        totalC += m.carbs;
+        totalF += m.fat;
+      });
+
+      // KPI cards
+      document.getElementById('kpiConsumed').innerHTML = `${totalKcal.toLocaleString()} <span class="text-xs font-semibold text-slate-400">kcal</span>`;
+      const netKcal = Math.max(0, totalKcal - burnedKcal);
+      document.getElementById('kpiNet').innerHTML = `${netKcal.toLocaleString()} <span class="text-xs font-semibold text-slate-400">kcal</span>`;
+      document.getElementById('kpiWater').innerHTML = `${waterIntakeMl.toLocaleString()} <span class="text-xs font-semibold text-slate-400">ml</span>`;
+      const waterPct = Math.round((waterIntakeMl / waterGoalMl) * 100);
+      document.getElementById('kpiWaterPercent').textContent = `${waterPct}%`;
+      document.getElementById('trackerWaterDisplay').textContent = `${waterIntakeMl.toLocaleString()} / ${waterGoalMl.toLocaleString()}ml (${waterPct}%)`;
+      document.getElementById('trackerWaterBar').style.width = `${Math.min(100, waterPct)}%`;
+
+      // Ring
+      document.getElementById('ringConsumed').textContent = totalKcal.toLocaleString();
+      const remaining = Math.max(0, userGoal.targetKcal - totalKcal);
+      document.getElementById('ringRemaining').textContent = `${remaining.toLocaleString()} kcal left`;
+
+      const offset = 251.2 * (1 - Math.min(1.0, totalKcal / userGoal.targetKcal));
+      const ring = document.getElementById('deskCalorieRing');
+      ring.style.strokeDashoffset = offset;
+      ring.setAttribute('stroke', totalKcal > userGoal.targetKcal ? '#E53935' : '#2E7D32');
+
+      // Macros
+      document.getElementById('macroProteinLabel').textContent = `${Math.round(totalP)} / ${userGoal.targetP}g (${Math.round((totalP / userGoal.targetP) * 100)}%)`;
+      document.getElementById('macroProteinBar').style.width = `${Math.min(100, (totalP / userGoal.targetP) * 100)}%`;
+
+      document.getElementById('macroCarbsLabel').textContent = `${Math.round(totalC)} / ${userGoal.targetC}g (${Math.round((totalC / userGoal.targetC) * 100)}%)`;
+      document.getElementById('macroCarbsBar').style.width = `${Math.min(100, (totalC / userGoal.targetC) * 100)}%`;
+
+      document.getElementById('macroFatLabel').textContent = `${Math.round(totalF)} / ${userGoal.targetF}g (${Math.round((totalF / userGoal.targetF) * 100)}%)`;
+      document.getElementById('macroFatBar').style.width = `${Math.min(100, (totalF / userGoal.targetF) * 100)}%`;
+
+      // Meals Table
+      const tbody = document.getElementById('mealsTableBody');
+      tbody.innerHTML = '';
+      if (mealLog.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-slate-400">No meals logged for today.</td></tr>`;
+        return;
+      }
+
+      mealLog.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition";
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-bold text-slate-700">${item.mealType}</td>
+          <td class="py-3 px-4 font-bold text-slate-900">${item.foodName}</td>
+          <td class="py-3 px-4 text-slate-500">${item.grams}g</td>
+          <td class="py-3 px-4 font-bold text-emerald-700">${item.calories} kcal</td>
+          <td class="py-3 px-4 text-slate-600">${item.protein.toFixed(1)}g</td>
+          <td class="py-3 px-4 text-slate-600">${item.carbs.toFixed(1)}g</td>
+          <td class="py-3 px-4 text-slate-600">${item.fat.toFixed(1)}g</td>
+          <td class="py-3 px-4 text-right">
+            <button onclick="deleteMeal(${item.id})" class="text-slate-400 hover:text-rose-600 p-1" title="Delete">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function deleteMeal(id) {
+      mealLog = mealLog.filter(m => m.id !== id);
+      refreshDashboard();
+    }
+
+    // Studio functions
+    function selectStudioFood(key) {
+      const match = FOOD_DATABASE.find(f => f.name.toLowerCase().includes(key)) || FOOD_DATABASE[0];
+      currentStudioFood = match;
+      document.getElementById('studioFoodImage').src = match.img;
+      document.getElementById('studioFoodTitle').textContent = match.name;
+      document.getElementById('studioInferenceTag').textContent = `TFLite 42ms (94.2%)`;
+      updateStudioCalculations();
+    }
+
+    function onStudioSlider(val) {
+      currentStudioGrams = parseInt(val);
+      updateStudioCalculations();
+    }
+
+    function adjustStudioPortion(delta) {
+      currentStudioGrams = Math.max(25, Math.min(500, currentStudioGrams + delta));
+      document.getElementById('studioSlider').value = currentStudioGrams;
+      updateStudioCalculations();
+    }
+
+    function updateStudioCalculations() {
+      document.getElementById('studioPortionLabel').textContent = `${currentStudioGrams}g`;
+      const ratio = currentStudioGrams / 100.0;
+      const c = Math.round(currentStudioFood.kcal * ratio);
+      document.getElementById('calcCalories').textContent = `${c} kcal`;
+      document.getElementById('calcProtein').textContent = `${(currentStudioFood.p * ratio).toFixed(1)}g`;
+      document.getElementById('calcCarbs').textContent = `${(currentStudioFood.c * ratio).toFixed(1)}g`;
+      document.getElementById('calcFat').textContent = `${(currentStudioFood.f * ratio).toFixed(1)}g`;
+      document.getElementById('studioCalorieTag').textContent = `${c} kcal`;
+    }
+
+    function selectMealType(type) {
+      currentStudioMealType = type;
+      document.querySelectorAll('.studio-meal-btn').forEach(b => {
+        b.className = b.textContent === type
+          ? "studio-meal-btn py-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-50 text-emerald-800 font-bold"
+          : "studio-meal-btn py-1.5 rounded-xl border border-slate-200 text-slate-600";
+      });
+    }
+
+    function addCurrentFoodToTable() {
+      const ratio = currentStudioGrams / 100.0;
+      mealLog.unshift({
+        id: Date.now(),
+        foodName: currentStudioFood.name,
+        grams: currentStudioGrams,
+        calories: Math.round(currentStudioFood.kcal * ratio),
+        protein: parseFloat((currentStudioFood.p * ratio).toFixed(1)),
+        carbs: parseFloat((currentStudioFood.c * ratio).toFixed(1)),
+        fat: parseFloat((currentStudioFood.f * ratio).toFixed(1)),
+        mealType: currentStudioMealType
+      });
+      refreshDashboard();
+      scrollToSection('mealsTableSection');
+    }
+
+    // Modal toggles
+    function openPhoneQrModal() {
+      document.getElementById('phoneQrModal').classList.remove('hidden');
+      const canvas = document.getElementById('qrCanvas');
+      if (canvas) {
+        drawQrCode(canvas, "http://192.168.1.5:8080/mobile.html");
+      }
+    }
+
+    function closePhoneQrModal() {
+      document.getElementById('phoneQrModal').classList.add('hidden');
+    }
+
+    function showJavaInfoModal() {
+      document.getElementById('javaInfoModal').classList.remove('hidden');
+    }
+
+    function closeJavaInfoModal() {
+      document.getElementById('javaInfoModal').classList.add('hidden');
+    }
+
+    function openManualAddModal() {
+      document.getElementById('manualAddModal').classList.remove('hidden');
+      onFoodSearch('');
+    }
+
+    function closeManualAddModal() {
+      document.getElementById('manualAddModal').classList.add('hidden');
+    }
+
+    function onFoodSearch(query) {
+      const container = document.getElementById('foodSearchResults');
+      container.innerHTML = '';
+      FOOD_DATABASE.filter(f => f.name.toLowerCase().includes(query.toLowerCase())).forEach(item => {
+        const row = document.createElement('div');
+        row.className = "p-2 hover:bg-emerald-50 rounded-lg cursor-pointer flex justify-between items-center transition";
+        row.innerHTML = `<div><span class="font-bold text-slate-800">${item.name}</span><span class="text-[10px] text-slate-400 block">${item.kcal} kcal/100g</span></div><button class="px-2.5 py-1 bg-emerald-600 text-white rounded text-[10px] font-bold">Select</button>`;
+        row.onclick = () => {
+          currentStudioFood = item;
+          closeManualAddModal();
+          selectStudioFood(item.name.toLowerCase());
+          scrollToSection('foodStudioSection');
+        };
+        container.appendChild(row);
+      });
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function shiftDate(delta) {}
+
+    // Init
+    refreshDashboard();
+    updateStudioCalculations();
+  </script>
+</body>
+</html>

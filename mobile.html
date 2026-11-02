@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NutriWorks Mobile Companion (OpenNutriTracker)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { user-select: none; -webkit-user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-screen w-screen flex flex-col overflow-hidden antialiased">
+
+  <!-- Mobile Top Header Bar -->
+  <div class="bg-emerald-700 text-white px-4 py-3 flex items-center justify-between shadow-sm shrink-0">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-lg bg-emerald-800 flex items-center justify-center font-bold text-white text-xs">
+        NW
+      </div>
+      <div>
+        <span class="font-bold text-base tracking-wide block leading-tight">NutriWorks</span>
+        <span class="text-[10px] text-emerald-200">Phone-to-Laptop Companion</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 text-xs">
+      <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+      <span class="text-[11px] font-semibold text-emerald-100">Laptop Synced</span>
+    </div>
+  </div>
+
+  <!-- Mobile Screen Content -->
+  <div id="mobileContent" class="flex-1 overflow-y-auto p-4 space-y-3.5">
+    
+    <!-- Calorie Progress Ring Card -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+      <div class="flex items-center justify-between">
+        <div class="relative w-28 h-28 flex items-center justify-center shrink-0">
+          <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" stroke="#F1F5F9" stroke-width="8" fill="transparent"/>
+            <circle id="mobCalorieRing" cx="50" cy="50" r="40" stroke="#2E7D32" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="85" stroke-linecap="round" fill="transparent"/>
+          </svg>
+          <div class="absolute text-center">
+            <span id="mobConsumed" class="text-lg font-extrabold text-slate-800 block leading-tight">1,340</span>
+            <span class="text-[9px] text-slate-400 uppercase font-semibold">kcal eaten</span>
+            <span id="mobRemaining" class="text-xs font-bold text-emerald-700 block">764 left</span>
+          </div>
+        </div>
+
+        <div class="flex-1 pl-4 space-y-2 text-xs">
+          <div>
+            <div class="flex justify-between text-[11px] font-semibold text-slate-600 mb-0.5">
+              <span>Protein</span>
+              <span id="mobProteinText">75 / 105g</span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div id="mobProteinBar" class="h-full bg-blue-600 rounded-full" style="width: 71%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-[11px] font-semibold text-slate-600 mb-0.5">
+              <span>Carbs</span>
+              <span id="mobCarbsText">165 / 263g</span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div id="mobCarbsBar" class="h-full bg-amber-500 rounded-full" style="width: 63%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-[11px] font-semibold text-slate-600 mb-0.5">
+              <span>Fat</span>
+              <span id="mobFatText">48 / 70g</span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div id="mobFatBar" class="h-full bg-rose-500 rounded-full" style="width: 68%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Action: Snap Food / Log Meal -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+      <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Sync Food to Laptop Desktop</span>
+      <div class="grid grid-cols-2 gap-2">
+        <label class="flex flex-col items-center justify-center py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl cursor-pointer transition">
+          <span class="text-xs font-bold text-emerald-800">Open Camera</span>
+          <span class="text-[10px] text-emerald-600">Snap Meal Photo</span>
+          <input type="file" accept="image/*" capture="environment" class="hidden" onchange="handlePhonePhoto(this)">
+        </label>
+        <button onclick="triggerQuickAddModal()" class="flex flex-col items-center justify-center py-2.5 px-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl transition">
+          <span class="text-xs font-bold text-slate-800">+ Quick Log</span>
+          <span class="text-[10px] text-slate-500">Name & Calories</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Daily Trackers: Water & Fasting -->
+    <div class="grid grid-cols-2 gap-2.5">
+      <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 space-y-1.5">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Water Hydration</span>
+        <span id="mobWaterText" class="text-xs font-bold text-blue-600 block">1,750 / 2,500ml</span>
+        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div id="mobWaterBar" class="h-full bg-blue-500 rounded-full" style="width: 70%"></div>
+        </div>
+        <button onclick="addMobWater(250)" class="w-full py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-lg text-[10px] transition">+250ml Water</button>
+      </div>
+
+      <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 space-y-1.5">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Fasting (16:8)</span>
+        <span id="mobFastingBadge" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">ACTIVE FAST</span>
+        <span id="mobFastingTime" class="text-xs font-bold text-slate-800 block">14h 18m left</span>
+        <button onclick="toggleMobFasting()" class="w-full py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-[10px] transition">Toggle Fast</button>
+      </div>
+    </div>
+
+    <!-- Logged Meals List -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-2.5">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600">Today's Meals</h3>
+        <span id="mobMealCount" class="text-[10px] px-2 py-0.5 bg-slate-100 rounded-full font-bold text-slate-600">5 items</span>
+      </div>
+      <div id="mobMealsContainer" class="space-y-1.5"></div>
+    </div>
+
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="syncToast" class="fixed bottom-4 left-4 right-4 bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-lg text-center opacity-0 transition-opacity pointer-events-none">
+    Meal synced to laptop desktop!
+  </div>
+
+  <script>
+    let mobWater = 1750;
+    const mobWaterGoal = 2500;
+    let mobFasting = true;
+    let mobMeals = [
+      { name: "Oatmeal with Almond Milk", type: "Breakfast", grams: 220, kcal: 280 },
+      { name: "Boiled Egg (2 pcs)", type: "Breakfast", grams: 100, kcal: 144 },
+      { name: "Green Apple", type: "Snack", grams: 180, kcal: 95 },
+      { name: "Grilled Chicken & Brown Rice", type: "Lunch", grams: 320, kcal: 510 },
+      { name: "Paneer Salad Bowl", type: "Dinner", grams: 200, kcal: 311 }
+    ];
+
+    function renderMobMeals() {
+      const container = document.getElementById('mobMealsContainer');
+      container.innerHTML = '';
+      mobMeals.forEach(m => {
+        const item = document.createElement('div');
+        item.className = "flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100 text-xs";
+        item.innerHTML = `
+          <div>
+            <span class="font-bold text-slate-800 block">${m.name}</span>
+            <span class="text-[10px] text-slate-400">${m.type} &bull; ${m.grams}g</span>
+          </div>
+          <span class="font-bold text-emerald-700">${m.kcal} kcal</span>
+        `;
+        container.appendChild(item);
+      });
+      document.getElementById('mobMealCount').textContent = `${mobMeals.length} items`;
+    }
+
+    function addMobWater(ml) {
+      mobWater = Math.min(mobWaterGoal, mobWater + ml);
+      document.getElementById('mobWaterText').textContent = `${mobWater} / ${mobWaterGoal}ml`;
+      document.getElementById('mobWaterBar').style.width = `${(mobWater / mobWaterGoal) * 100}%`;
+      showToast("+250ml Water logged");
+    }
+
+    function toggleMobFasting() {
+      mobFasting = !mobFasting;
+      document.getElementById('mobFastingBadge').textContent = mobFasting ? "ACTIVE FAST" : "EATING WINDOW";
+      document.getElementById('mobFastingTime').textContent = mobFasting ? "14h 18m left" : "Eating window open";
+      showToast(mobFasting ? "Fast Started" : "Eating Window Opened");
+    }
+
+    function triggerQuickAddModal() {
+      const name = prompt("Enter food name:", "Chicken Biryani");
+      if (!name) return;
+      const kcalStr = prompt("Enter calories (kcal):", "420");
+      const kcal = parseInt(kcalStr) || 350;
+
+      syncMealToDesktop(name, kcal, 200);
+    }
+
+    function handlePhonePhoto(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const foodGuess = "Scanned Meal";
+        const estimatedKcal = 380;
+        syncMealToDesktop(foodGuess, estimatedKcal, 180);
+      }
+    }
+
+    function syncMealToDesktop(name, kcal, grams) {
+      mobMeals.unshift({ name, type: "Snack", grams, kcal });
+      renderMobMeals();
+
+      // Send to embedded HTTP server on laptop
+      const body = `name=${encodeURIComponent(name)}&kcal=${kcal}&grams=${grams}`;
+      fetch('/api/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body
+      })
+      .then(res => res.json())
+      .then(data => {
+        showToast(`Synced "${name}" to Laptop!`);
+      })
+      .catch(err => {
+        showToast(`Saved locally. (Laptop sync pending)`);
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('syncToast');
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0');
+      }, 2500);
+    }
+
+    renderMobMeals();
+  </script>
+</body>
+</html>

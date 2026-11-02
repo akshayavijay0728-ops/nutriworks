@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Details -->
+    <string name="app_name">NutriWorks</string>
+    <string name="tagline">Smart Nutrition &amp; Food Recognition</string>
+
+    <!-- Bottom Navigation Destination Titles -->
+    <string name="title_home">Home</string>
+    <string name="title_capture">Capture</string>
+    <string name="title_confirm_image">Confirm Photo</string>
+    <string name="title_result">Recognition Result</string>
+    <string name="title_history">History</string>
+    <string name="title_reports">Reports</string>
+    <string name="title_profile">Profile</string>
+
+    <!-- Home Screen -->
+    <string name="home_greeting">Hello, Foodie!</string>
+    <string name="home_subtitle">Track your daily intake</string>
+    <string name="home_calories_burned_target">1,450 / 2,000 kcal</string>
+    <string name="home_calories_remaining">550 kcal remaining</string>
+    <string name="home_macro_protein">Protein: 85g / 130g</string>
+    <string name="home_macro_carbs">Carbs: 160g / 220g</string>
+    <string name="home_macro_fat">Fat: 48g / 65g</string>
+    <string name="home_section_todays_meals">Today\'s Meals</string>
+    <string name="home_empty_meals">No meals logged yet today. Tap Capture to start!</string>
+
+    <!-- Capture Screen -->
+    <string name="capture_title">Recognize Food</string>
+    <string name="capture_subtitle">Snap a fresh photo of your meal or choose an existing photo to estimate calories &amp; macros</string>
+    <string name="capture_btn_camera">Open Camera</string>
+    <string name="capture_btn_gallery">Gallery</string>
+    <string name="capture_camera_hint">Center your plate in the viewfinder</string>
+    <string name="capture_gallery_hint">Select a food photo from your gallery</string>
+    <string name="capture_shutter_desc">Capture meal photo</string>
+    <string name="capture_flash_desc">Toggle flash mode</string>
+    <string name="capture_flip_desc">Switch front and back camera</string>
+
+    <!-- Flash Mode Labels -->
+    <string name="flash_mode_off">Flash: Off</string>
+    <string name="flash_mode_on">Flash: On</string>
+    <string name="flash_mode_auto">Flash: Auto</string>
+
+    <!-- Camera Permissions & Hardware -->
+    <string name="permission_camera_rationale_title">Camera Access Required</string>
+    <string name="permission_camera_rationale_msg">NutriWorks needs camera access so you can snap meal photos directly for on-device nutritional analysis. No photos or data leave your phone.</string>
+    <string name="permission_camera_settings_msg">Camera permission is permanently denied. Please enable camera access in App Settings to snap meal photos.</string>
+    <string name="permission_btn_grant">Allow Camera</string>
+    <string name="permission_btn_settings">Open Settings</string>
+    <string name="permission_btn_cancel">Cancel</string>
+    <string name="error_no_camera_hardware">No camera hardware was detected on this device. You can still pick meal photos from your gallery.</string>
+    <string name="error_camera_init_failed">Failed to initialize camera preview: %s</string>
+    <string name="error_image_capture_failed">Image capture failed: %s</string>
+    <string name="error_invalid_image">Could not process or read the selected image.</string>
+
+    <!-- Confirm Image Screen -->
+    <string name="confirm_title">Verify Meal Photo</string>
+    <string name="confirm_subtitle">Ensure your food is clearly visible before nutritional analysis</string>
+    <string name="confirm_btn_retake">Retake</string>
+    <string name="confirm_btn_proceed">Confirm Photo</string>
+    <string name="confirm_photo_ready">Photo captured successfully and stored privately.</string>
+
+    <!-- Recognition Result Screen -->
+    <string name="result_title">Food Detected</string>
+    <string name="result_section_predictions">Top Predictions (Tap to Select)</string>
+    <string name="result_low_confidence_title">Not sure, pick the correct food</string>
+    <string name="result_low_confidence_msg">Prediction confidence is below 60%. Please verify the chips above or search manually.</string>
+    <string name="result_manual_search_hint">Search food or dish name...</string>
+    <string name="result_selected_label">Selected: %s</string>
+    <string name="result_btn_confirm">Add to Daily Log</string>
+    <string name="result_btn_retake">Try Another Photo</string>
+    <string name="result_inference_format">⚡ %d ms inference</string>
+
+    <!-- Nutrition Card Strings -->
+    <string name="nutrition_card_title">Nutrition &amp; Portion Breakdown</string>
+    <string name="portion_label_grams">Portion Size (Grams)</string>
+    <string name="portion_label_servings">Servings Multiplier</string>
+    <string name="meal_type_breakfast">Breakfast</string>
+    <string name="meal_type_lunch">Lunch</string>
+    <string name="meal_type_dinner">Dinner</string>
+    <string name="meal_type_snack">Snack</string>
+    <string name="meal_type_title">Log For Meal</string>
+    <string name="nutrition_missing_title">Nutrition Data Unavailable</string>
+    <string name="nutrition_missing_msg">Could not find nutrition data locally or online. Tap below to enter custom calories and macros.</string>
+    <string name="btn_enter_nutrition_manual">Enter Nutrition Manually</string>
+    <string name="dialog_manual_nutrition_title">Custom Nutrition (per 100g)</string>
+    <string name="dialog_btn_save">Save &amp; Calculate</string>
+
+    <!-- History Screen -->
+    <string name="history_title">Intake History</string>
+    <string name="history_subtitle">Review past days and weekly intake consistency</string>
+    <string name="history_placeholder_msg">Your historical logs will appear here once you begin capturing meals.</string>
+
+    <!-- Reports Screen -->
+    <string name="reports_title">Nutrition Reports</string>
+    <string name="reports_subtitle">Calorie trends &amp; macronutrient distribution</string>
+    <string name="reports_placeholder_msg">MPAndroidChart weekly and monthly trend charts will render here in Phase 4.</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_title">My Profile</string>
+    <string name="profile_subtitle">Customize targets, units, and preferences</string>
+    <string name="profile_user_name">Alex Rivera</string>
+    <string name="profile_target_calories">Daily Target: 2,000 kcal</string>
+    <string name="profile_weight">Current Weight: 72 kg</string>
+    <string name="profile_goal">Goal: Maintain &amp; Lean Muscle</string>
+</resources>
